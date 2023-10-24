@@ -43,13 +43,13 @@ modules:
   - name: meta
     buildsystem: simple
     build-commands:
-      - install -Dm644 ${FLATPAK_ID}.appdata.xml ${FLATPAK_DEST}/usr/share/appdata/${FLATPAK_ID}.appdata.xml
-      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/usr/share/applications/${FLATPAK_ID}.desktop
-      - install -Dm644 ${FLATPAK_ID}.svg ${FLATPAK_DEST}/usr/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
-      - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/usr/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
+      - install -Dm644 ${FLATPAK_ID}.metainfo.xml ${FLATPAK_DEST}/share/metainfo/${FLATPAK_ID}.metainfo.xml
+      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 ${FLATPAK_ID}.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
     sources:
       - type: file
-        path: org.decred.dcrdex.appdata.xml
+        path: org.decred.dcrdex.metainfo.xml
       - type: file
         path: org.decred.dcrdex.desktop
       - type: file
@@ -60,11 +60,6 @@ modules:
 cleanup:
   - /include
   - /lib/pkgconfig
-  - /usr/share/aclocal
-  - /usr/share/man
-  - /usr/share/doc
-  - /usr/share/bug
-  - /usr/share/lintian
   - "*.la"
   - "*.a"
 
