@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=DCRDEX
+Comment=Decentralized cryptocurrency exchange
+Categories=Office;Finance;
+Icon=org.decred.dcrdex
+Exec=dexc
+Terminal=false
+

@@ -1,0 +1,70 @@
+app-id: org.decred.dcrdex
+runtime: org.gnome.Platform
+runtime-version: '42'
+sdk: org.gnome.Sdk 
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.golang
+command: dexc
+finish-args:
+  - --socket=x11
+  - --socket=wayland
+  - --share=ipc
+  - --share=network
+  - --device=dri
+  - --filesystem=home
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+build-options:
+  build-args:
+# this needs to be disabled for production.  flathub will not accept
+# builds requiring network access.
+    - --share=network
+  env:
+    - GOBIN=/app/bin
+    - GOROOT=/usr/lib/sdk/golang  
+modules:
+  - name: dexc
+    buildsystem: simple
+    subdir: client/cmd/dexc-desktop
+    build-commands:
+      - $GOROOT/bin/go build -trimpath -o dexc
+      - install -Dm755 dexc ${FLATPAK_DEST}/bin/dexc
+    sources:
+      - type: archive
+        url: https://github.com/peterzen/dcrdex/archive/refs/tags/v0.7.1.tar.gz
+        sha256: 6e124a7b85ea7d8562716c95cf063f88add6ae48be69c264a6099dab30eb4317
+        x-checker-data:
+          type: json
+          url: https://api.github.com/repos/peterzen/dcrdex/releases/latest
+          tag-query: .tag_name
+          timestamp-query: .published_at
+          version-query: $tag | sub("^[vV]"; "")
+          url-query: '"https://github.com/peterzen/dcrdex/archive/\($tag)/v\($version).tar.gz"'
+  - name: meta
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 ${FLATPAK_ID}.appdata.xml ${FLATPAK_DEST}/usr/share/appdata/${FLATPAK_ID}.appdata.xml
+      - install -Dm644 ${FLATPAK_ID}.desktop ${FLATPAK_DEST}/usr/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 ${FLATPAK_ID}.svg ${FLATPAK_DEST}/usr/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      - install -Dm644 ${FLATPAK_ID}.png ${FLATPAK_DEST}/usr/share/icons/hicolor/128x128/apps/${FLATPAK_ID}.png
+    sources:
+      - type: file
+        path: org.decred.dcrdex.appdata.xml
+      - type: file
+        path: org.decred.dcrdex.desktop
+      - type: file
+        path: org.decred.dcrdex.png
+      - type: file
+        path: org.decred.dcrdex.svg
+
+cleanup:
+  - /include
+  - /lib/pkgconfig
+  - /usr/share/aclocal
+  - /usr/share/man
+  - /usr/share/doc
+  - /usr/share/bug
+  - /usr/share/lintian
+  - "*.la"
+  - "*.a"
+
